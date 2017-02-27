@@ -11,6 +11,8 @@ RELOAD_VALUE 		  EQU 0xFFFFFFFF
         AREA    |.text|, CODE, READONLY, ALIGN=2
         THUMB
 ; ;-UUU-Export routine(s) from SysTick.s to callers
+	EXPORT	SysTick_Init
+	EXPORT	NVIC_ST_CURRENT_R
 
 ;------------SysTick_Init------------
 ; ;-UUU-Complete this subroutine
