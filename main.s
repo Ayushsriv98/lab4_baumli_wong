@@ -1,7 +1,7 @@
 ;****************** main.s ***************
-; Program written by: ***Your Names**update this***
+; Program written by: Kate Baumli and Rebecca Wong
 ; Date Created: 2/14/2017
-; Last Modified: 2/14/2017
+; Last Modified: 2/27/2017
 ; Brief description of the program
 ;   The LED toggles at 8 Hz and a varying duty-cycle
 ;   Repeat the functionality from Lab2-3 but now we want you to 
