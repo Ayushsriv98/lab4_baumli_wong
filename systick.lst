@@ -38,38 +38,37 @@ ARM Macro Assembler    Page 1
    22 00000000         ; Modifies: ??
    23 00000000         SysTick_Init
    24 00000000 B40F            PUSH             {R0-R3}
-   25 00000002 480B            LDR              R0,=NVIC_ST_CTRL_R
+   25 00000002 480A            LDR              R0,=NVIC_ST_CTRL_R
    26 00000004 6801            LDR              R1,[R0]
    27 00000006 F021 0101       BIC              R1,R1,#0x01
    28 0000000A 6001            STR              R1,[R0]
-   29 0000000C 4A09            LDR              R2,=NVIC_ST_RELOAD_R
+   29 0000000C 4A08            LDR              R2,=NVIC_ST_RELOAD_R
    30 0000000E F04F 33FF       LDR              R3,=RELOAD_VALUE
-   31 00000012 6819            LDR              R1,[R3]
-   32 00000014 6011            STR              R1,[R2]
-   33 00000016 4A06            LDR              R2,=NVIC_ST_CTRL_R
-   34 00000018 F04F 0100       MOV              R1,#0
-   35 0000001C 6011            STR              R1,[R2]
-   36 0000001E 6801            LDR              R1,[R0]
-   37 00000020 F041 0105       ORR              R1,R1,#0x05
-   38 00000024 F021 0102       BIC              R1,R1,#0x02
-   39 00000028 6001            STR              R1,[R0]
-   40 0000002A BC0F            POP              {R0-R3}
-   41 0000002C 4770            BX               LR          ; return
-   42 0000002E         
-   43 0000002E 00 00           ALIGN                        ; make sure the end
+   31 00000012 6013            STR              R3,[R2]
+   32 00000014 4A05            LDR              R2,=NVIC_ST_CTRL_R
+   33 00000016 F04F 0100       MOV              R1,#0
+   34 0000001A 6011            STR              R1,[R2]
+   35 0000001C 6801            LDR              R1,[R0]
+   36 0000001E F041 0105       ORR              R1,R1,#0x05
+   37 00000022 F021 0102       BIC              R1,R1,#0x02
+   38 00000026 6001            STR              R1,[R0]
+   39 00000028 BC0F            POP              {R0-R3}
+   40 0000002A 4770            BX               LR          ; return
+   41 0000002C         
+   42 0000002C                 ALIGN                        ; make sure the end
                                                              of this section is
                                                              aligned
-   44 00000030                 END                          ; end of file
+   43 0000002C                 END                          ; end of file
               E000E010 
               E000E014 
 Command Line: --debug --xref --cpu=Cortex-M4 --apcs=interwork --depend=.\systic
+k.d -o.\systick.o -IC:\Keil\ARM\RV31\INC -IC:\Keil\ARM\CMSIS\Include -IC:\Keil\
 
 
 
 ARM Macro Assembler    Page 2 
 
 
-k.d -o.\systick.o -IC:\Keil\ARM\RV31\INC -IC:\Keil\ARM\CMSIS\Include -IC:\Keil\
 ARM\Inc\Luminary --predefine="__EVAL SETA 1" --list=.\systick.lst SysTick.s
 
 
@@ -107,7 +106,7 @@ Symbol: NVIC_ST_CTRL_R
       At line 7 in file SysTick.s
    Uses
       At line 25 in file SysTick.s
-      At line 33 in file SysTick.s
+      At line 32 in file SysTick.s
 
 NVIC_ST_CURRENT_R E000E018
 

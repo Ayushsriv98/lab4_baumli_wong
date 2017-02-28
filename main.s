@@ -34,14 +34,18 @@ GPIO_PORTE_AFSEL_R EQU 0x40024420
 GPIO_PORTE_DEN_R   EQU 0x4002451C
 
 GPIO_PORTF_DATA_R  EQU 0x400253FC
+GPIO_PORTF_AMSEL_R EQU 0x40025528
+GPIO_PORTF_PCTL_R  EQU 0x4002552C
+GPIO_PORTF_LOCK_R  EQU 0x40025520
+GPIO_PORTF_CR_R    EQU 0x40025524
 GPIO_PORTF_DIR_R   EQU 0x40025400
 GPIO_PORTF_AFSEL_R EQU 0x40025420
 GPIO_PORTF_PUR_R   EQU 0x40025510
 GPIO_PORTF_DEN_R   EQU 0x4002551C
 SYSCTL_RCGCGPIO_R  EQU 0x400FE608
 
-COUNT	EQU 500000
-ENTIRE_COUNT EQU 2500000
+COUNT	EQU 332000
+ENTIRE_COUNT EQU 1660000
 LED_ON EQU	1
 LED_OFF EQU 0	
 SWITCH EQU 2
@@ -73,10 +77,31 @@ Start
 
 	LDR R1, =SYSCTL_RCGCGPIO_R      ; activate clock for Port F
     LDR R0, [R1]                 
-    ORR R0, R0, #0x10               ; set bits 4 & 5 to turn on clock
+    ORR R0, R0, #0x30               ; set bits 4 & 5 to turn on clock
     STR R0, [R1]                  
     NOP
-    NOP                                                       
+    NOP             
+	LDR R1, =GPIO_PORTF_LOCK_R      ; 2) unlock the lock register
+    LDR R0, =0x4C4F434B             ; unlock GPIO Port F Commit Register
+    STR R0, [R1]                    
+    LDR R1, =GPIO_PORTF_CR_R        ; enable commit for Port F
+    MOV R0, #0xFF                   ; 1 means allow access
+    STR R0, [R1]                    
+    LDR R1, =GPIO_PORTF_AMSEL_R     ; 3) disable analog functionality
+    MOV R0, #0                      ; 0 means analog is off
+    STR R0, [R1]                    
+    LDR R1, =GPIO_PORTF_PCTL_R      ; 4) configure as GPIO
+    MOV R0, #0x00000000             ; 0 means configure Port F as GPIO
+    STR R0, [R1]                  
+    LDR R1, =GPIO_PORTF_DIR_R       ; 5) set direction register
+    MOV R0,#0x04                   	;PF2 is output
+    STR R0, [R1]                    
+    LDR R1, =GPIO_PORTF_AFSEL_R     ; 6) regular port function
+    MOV R0, #0                      ; 0 means disable alternate function 
+    STR R0, [R1]                                
+    LDR R1, =GPIO_PORTF_DEN_R       ; 7) enable Port F digital port
+    MOV R0, #0xFF                   ; 1 means enable digital I/O
+    STR R0, [R1]  
     LDR R1, =GPIO_PORTE_DIR_R       ; set direction register
     MOV R0,#0x01	                ; PE1 INPUT, PE0 output
     STR R0, [R1]                    
@@ -87,19 +112,34 @@ Start
     MOV R0, #0xFF                   ; 1 means enable digital I/O
     STR R0, [R1]      
     LDR R0, [R1]                 
-	
+		BL	Debug_Init
 		LDR R4,=COUNT					;R4 HAS 20% OF DELAY
 		LDR R9,=ONE
 		LDR R5,=ENTIRE_COUNT
 		AND R7,R7,#0					;R7 WILL HOLD FLAG THAT WILL BE ASSERTED IF SWITCH HAS BEEN PRESSED
 		LDR R0,=GPIO_PORTE_DATA_R
-loop		
+		MOV	R11,#0
+		LDR R10,=GPIO_PORTF_DATA_R		; THIS SECTION TOGGLES
+loop	LDR R12,[R10]					;
+		AND R12,R12,#0x04				; THE HEARTBEAT 
+		EOR R12,#0x04					;
+		STR R12,[R10]					; LED ON PF2
+		CMP	R11,#0
+		BEQ	FLASH
+		BL	Debug_Capture
+		SUB	R11,R11,#1
+FLASH
 		LDR R1,[R0]						;STARTING FLASHING
 		LDR R2,=LED_ON					;TURNING
 		ORR R1,R1,R2					;ON
 		STR R1,[R0]						;LED
 		MOV R3,R4						;R3 WILL BE USED BY DELAY FUNCTION & DECREMENTED
 		BL DELAY
+		CMP	R11,#0
+		BEQ	FLASH2
+		BL	Debug_Capture
+		SUB	R11,R11,#1
+FLASH2
 		LDR R1,[R0]						;TURNING
 		LDR R2,=LED_OFF
 		AND R1,R1,R2					;LED
@@ -112,10 +152,14 @@ loop
 		AND R1,R1,R6					;BIT MASKING SWITCH
 		CMP R1, R6
 		BNE NOT_CURRENTLY_PRESSED					;CHECKING IF SWITCH  IS PRESSED CURRENTLY
+		CMP R7,R9									;SWITCH HAS ALREADY BEEN ASSERTED  BUT SWITCH IS STILL CURRENTLY PRESSED
+		BEQ NO_FLAG
+		MOV R11,#1							
 		LDR R7,=ONE
 		B NO_FLAG
 NOT_CURRENTLY_PRESSED CMP R7,R9					;COMPARING TO ONE TO SEE IF FLAG IS ASSERTED
 		BNE NO_FLAG
+		MOV R11,#7
 		CMP R4,R5						;SWITCH HAS BEEN ASSERTED AND RELEASED, CHANGING DUTY CYCLE
 		BNE ADD_TWENTY_PERCENT			;CHECKING IF THE DUTY CYCLE IS AT 100%
 		AND R4,R4,#0
@@ -142,7 +186,6 @@ Debug_Init
 	LDR R1,[R1]
 	MOV R2,#50	;R2 will keep track of how many array values we have traversed through
 	MOV R3,#0xFF
-
 Buffer_Init			;loop that stores 0xFF into all buffer locations
 	STRB R3,[R0]	;STORE 0xFF into data buffer location
 	STRB R3,[R1]
@@ -156,13 +199,13 @@ Buffer_Init			;loop that stores 0xFF into all buffer locations
 	BL 	SysTick_Init
 	LDR R0,=NEntries
 	MOV R1,#50
-	STR R1,[R0]
+	STRB R1,[R0]
 	POP {R0-R4,PC}	;return from subroutine
 	
 Debug_Capture
 	PUSH {R0-R10,LR}
 	LDR R0,=NEntries				;Checking if we have stored 50 entries yet
-	LDR R1,[R0] 
+	LDRB R1,[R0] 
 	CMP R1,#0
 	BEQ DONE
 	LDR R2,=GPIO_PORTE_DATA_R
@@ -181,9 +224,10 @@ Debug_Capture
 	LDR R9,=TimePt
 	LDR R10,[R9]					;R10 has next availabl address of time buffer array
 	STR R8,[R10]
-	ADD R10,R10,#1					;incremented timeBuffer pointer for next time aroudn
+	ADD R10,R10,#4					;Incrementing time buffer pointer
 	STR R10,[R9]
 	SUB	R1,R1,#1					;decrementing index counter 
+	STRB R1,[R0]
 DONE
 	POP {R0-R10,PC}
 	 

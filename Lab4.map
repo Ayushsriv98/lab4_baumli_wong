@@ -37,10 +37,10 @@ Image Symbol Table
     SysTick.s                                0x00000000   Number         0  systick.o ABSOLUTE
     TExaS.c                                  0x00000000   Number         0  texas.o ABSOLUTE
     main.s                                   0x00000000   Number         0  main.o ABSOLUTE
-    .text                                    0x00000284   Section       56  systick.o(.text)
-    .text                                    0x000002bc   Section      348  main.o(.text)
-    .text                                    0x00000418   Section        0  texas.o(.text)
-    .constdata                               0x000008b8   Section      240  texas.o(.constdata)
+    .text                                    0x00000284   Section       52  systick.o(.text)
+    .text                                    0x000002b8   Section      508  main.o(.text)
+    .text                                    0x000004b4   Section        0  texas.o(.text)
+    .constdata                               0x00000954   Section      240  texas.o(.constdata)
     .data                                    0x20000000   Section       48  texas.o(.data)
     DATA                                     0x20000030   Section      259  main.o(DATA)
     DataBuffer                               0x20000030   Data          50  main.o(DATA)
@@ -181,31 +181,31 @@ Image Symbol Table
     uDMA_Error                               0x00000283   Thumb Code     0  startup.o(RESET)
     uDMA_Handler                             0x00000283   Thumb Code     0  startup.o(RESET)
     SysTick_Init                             0x00000285   Thumb Code     0  systick.o(.text)
-    Start                                    0x000002bd   Thumb Code     0  main.o(.text)
-    ADC1_Init                                0x00000419   Thumb Code   170  texas.o(.text)
-    SetCode                                  0x000004c3   Thumb Code    20  texas.o(.text)
-    UART0_Init                               0x000004d7   Thumb Code   162  texas.o(.text)
-    SetCourse                                0x00000579   Thumb Code    22  texas.o(.text)
-    PLL_Init                                 0x0000058f   Thumb Code   118  texas.o(.text)
-    TExaS_Init                               0x00000605   Thumb Code   282  texas.o(.text)
-    StopTimer4                               0x0000071f   Thumb Code    16  texas.o(.text)
-    StartTimer4                              0x0000072f   Thumb Code    24  texas.o(.text)
-    Timer4A_Handler                          0x00000747   Thumb Code    20  texas.o(.text)
-    ADC1_In                                  0x0000075b   Thumb Code     6  texas.o(.text)
-    Timer5A_Handler                          0x00000761   Thumb Code    34  texas.o(.text)
-    TExaS_Stop                               0x00000783   Thumb Code    18  texas.o(.text)
-    copy                                     0x00000795   Thumb Code    16  texas.o(.text)
-    SetMode                                  0x000007a5   Thumb Code    22  texas.o(.text)
-    UART0_InChar                             0x000007bb   Thumb Code    20  texas.o(.text)
-    UART0_InCharNonBlocking                  0x000007cf   Thumb Code    22  texas.o(.text)
-    UART0_OutChar                            0x000007e5   Thumb Code   200  texas.o(.text)
-    UART0_OutCharNonBlock                    0x000008ad   Thumb Code     6  texas.o(.text)
-    InputPortMsg                             0x000008b8   Data          40  texas.o(.constdata)
-    OutputPortMsg                            0x000008e0   Data          40  texas.o(.constdata)
-    BlankMsg                                 0x00000908   Data          40  texas.o(.constdata)
-    InitializedMsg                           0x00000930   Data          40  texas.o(.constdata)
-    IntroMsg                                 0x00000958   Data          40  texas.o(.constdata)
-    DoneMsg                                  0x00000980   Data          40  texas.o(.constdata)
+    Start                                    0x000002b9   Thumb Code     0  main.o(.text)
+    ADC1_Init                                0x000004b5   Thumb Code   170  texas.o(.text)
+    SetCode                                  0x0000055f   Thumb Code    20  texas.o(.text)
+    UART0_Init                               0x00000573   Thumb Code   162  texas.o(.text)
+    SetCourse                                0x00000615   Thumb Code    22  texas.o(.text)
+    PLL_Init                                 0x0000062b   Thumb Code   118  texas.o(.text)
+    TExaS_Init                               0x000006a1   Thumb Code   282  texas.o(.text)
+    StopTimer4                               0x000007bb   Thumb Code    16  texas.o(.text)
+    StartTimer4                              0x000007cb   Thumb Code    24  texas.o(.text)
+    Timer4A_Handler                          0x000007e3   Thumb Code    20  texas.o(.text)
+    ADC1_In                                  0x000007f7   Thumb Code     6  texas.o(.text)
+    Timer5A_Handler                          0x000007fd   Thumb Code    34  texas.o(.text)
+    TExaS_Stop                               0x0000081f   Thumb Code    18  texas.o(.text)
+    copy                                     0x00000831   Thumb Code    16  texas.o(.text)
+    SetMode                                  0x00000841   Thumb Code    22  texas.o(.text)
+    UART0_InChar                             0x00000857   Thumb Code    20  texas.o(.text)
+    UART0_InCharNonBlocking                  0x0000086b   Thumb Code    22  texas.o(.text)
+    UART0_OutChar                            0x00000881   Thumb Code   200  texas.o(.text)
+    UART0_OutCharNonBlock                    0x00000949   Thumb Code     6  texas.o(.text)
+    InputPortMsg                             0x00000954   Data          40  texas.o(.constdata)
+    OutputPortMsg                            0x0000097c   Data          40  texas.o(.constdata)
+    BlankMsg                                 0x000009a4   Data          40  texas.o(.constdata)
+    InitializedMsg                           0x000009cc   Data          40  texas.o(.constdata)
+    IntroMsg                                 0x000009f4   Data          40  texas.o(.constdata)
+    DoneMsg                                  0x00000a1c   Data          40  texas.o(.constdata)
     TExaS_Period                             0x20000000   Data           4  texas.o(.data)
     TExaS_Ports                              0x20000004   Data           8  texas.o(.data)
     TExaS_Meter                              0x2000000c   Data           4  texas.o(.data)
@@ -228,17 +228,17 @@ Memory Map of the image
 
   Image Entry point : 0x0000026d
 
-  Load Region LR_1 (Base: 0x00000000, Size: 0x00000adc, Max: 0xffffffff, ABSOLUTE)
+  Load Region LR_1 (Base: 0x00000000, Size: 0x00000b78, Max: 0xffffffff, ABSOLUTE)
 
-    Execution Region ER_RO (Base: 0x00000000, Size: 0x000009a8, Max: 0xffffffff, ABSOLUTE)
+    Execution Region ER_RO (Base: 0x00000000, Size: 0x00000a44, Max: 0xffffffff, ABSOLUTE)
 
     Base Addr    Size         Type   Attr      Idx    E Section Name        Object
 
     0x00000000   0x00000284   Code   RO            3  * RESET               startup.o
-    0x00000284   0x00000038   Code   RO           12    .text               systick.o
-    0x000002bc   0x0000015c   Code   RO           16    .text               main.o
-    0x00000418   0x000004a0   Code   RO           19    .text               texas.o
-    0x000008b8   0x000000f0   Data   RO           21    .constdata          texas.o
+    0x00000284   0x00000034   Code   RO           12    .text               systick.o
+    0x000002b8   0x000001fc   Code   RO           16    .text               main.o
+    0x000004b4   0x000004a0   Code   RO           19    .text               texas.o
+    0x00000954   0x000000f0   Data   RO           21    .constdata          texas.o
 
 
     Execution Region ER_RW (Base: 0x20000000, Size: 0x00000134, Max: 0xffffffff, ABSOLUTE)
@@ -265,13 +265,13 @@ Image component sizes
 
       Code (inc. data)   RO Data    RW Data    ZI Data      Debug   Object Name
 
-       348         52          0        259          0        284   main.o
+       508         88          0        259          0        324   main.o
        644        620          0          0       1024        700   startup.o
-        56         10          0          0          0        200   systick.o
+        52          8          0          0          0        200   systick.o
       1184        188        240         48         56      16168   texas.o
 
     ----------------------------------------------------------------------
-      2232        870        240        308       1084      17352   Object Totals
+      2388        904        240        308       1084      17392   Object Totals
          0          0          0          0          0          0   (incl. Generated)
          0          0          0          1          4          0   (incl. Padding)
 
@@ -286,15 +286,15 @@ Image component sizes
 
       Code (inc. data)   RO Data    RW Data    ZI Data      Debug   
 
-      2232        870        240        308       1084      17352   Grand Totals
-      2232        870        240        308       1084      17352   ELF Image Totals
-      2232        870        240        308          0          0   ROM Totals
+      2388        904        240        308       1084      17392   Grand Totals
+      2388        904        240        308       1084      17392   ELF Image Totals
+      2388        904        240        308          0          0   ROM Totals
 
 ==============================================================================
 
-    Total RO  Size (Code + RO Data)                 2472 (   2.41kB)
+    Total RO  Size (Code + RO Data)                 2628 (   2.57kB)
     Total RW  Size (RW Data + ZI Data)              1392 (   1.36kB)
-    Total ROM Size (Code + RO Data + RW Data)       2780 (   2.71kB)
+    Total ROM Size (Code + RO Data + RW Data)       2936 (   2.87kB)
 
 ==============================================================================
 
